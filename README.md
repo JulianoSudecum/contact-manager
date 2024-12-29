@@ -45,7 +45,6 @@ npm install
    DB_USER=root
    DB_PASSWORD=sua_senha
    DB_DATABASE=contact_manager
-   PORT=3000
    ```
 3. Substitua `sua_senha` pela senha real do usuário root do MySQL (ou outro usuário com privilégios suficientes).
 
@@ -171,14 +170,52 @@ Use o **Postman** ou outro cliente de API para testar os endpoints. Abaixo estã
    - Corpo:
      ```json
      {
-       "name": "Amigos"
+       "name": "Friends"
+     }
+     ```
+   - Resposta:
+     ```json
+     {
+       "id": 1,
+       "name": "Friends"
      }
      ```
 
-2. **Listar Todos os Contatos de um Grupo**:
-   - **GET** `/contacts-groups/:group_id`
+2. **Atualizar um Grupo**:
+   - **PATCH** `/groups/:id`
+   - Corpo:
+     ```json
+     {
+       "name": "Family"
+     }
+     ```
+   - Resposta:
+     ```json
+     {
+       "id": 1,
+       "name": "Family"
+     }
+     ```
 
-3. **Adicionar um Contato a um Grupo**:
+3. **Excluir um Grupo**:
+   - **DELETE** `/groups/:id`
+   - Resposta: Status **204 No Content**
+
+4. **Listar Todos os Contatos de um Grupo**:
+   - **GET** `/groups/:id/contacts`
+   - Resposta:
+     ```json
+     [
+       {
+         "contact_id": 1,
+         "name": "John Doe",
+         "phone": "(123) 456-7890"
+       }
+     ]
+     ```
+
+#### **Rotas de Associação de Contatos e Grupos**
+1. **Adicionar Contato a um Grupo**:
    - **POST** `/contacts-groups`
    - Corpo:
      ```json
@@ -187,8 +224,27 @@ Use o **Postman** ou outro cliente de API para testar os endpoints. Abaixo estã
        "group_id": 1
      }
      ```
+   - Resposta:
+     ```json
+     {
+       "message": "Contact added to group successfully."
+     }
+     ```
 
-4. **Remover um Contato de um Grupo**:
+2. **Listar Contatos de um Grupo**:
+   - **GET** `/contacts-groups/:group_id`
+   - Resposta:
+     ```json
+     [
+       {
+         "contact_id": 1,
+         "name": "John Doe",
+         "phone": "(123) 456-7890"
+       }
+     ]
+     ```
+
+3. **Remover Contato de um Grupo**:
    - **DELETE** `/contacts-groups`
    - Corpo:
      ```json
@@ -197,6 +253,7 @@ Use o **Postman** ou outro cliente de API para testar os endpoints. Abaixo estã
        "group_id": 1
      }
      ```
+   - Resposta: Status **204 No Content**
 
 #### **Relatórios**
 1. **Relatório de Contatos por Grupo**:
@@ -205,7 +262,7 @@ Use o **Postman** ou outro cliente de API para testar os endpoints. Abaixo estã
      ```json
      [
        {
-         "group_name": "Amigos",
+         "group_name": "Friends",
          "contact_count": 10
        }
      ]
@@ -220,13 +277,7 @@ Use o **Postman** ou outro cliente de API para testar os endpoints. Abaixo estã
    - Certifique-se de que o servidor MySQL está em execução.
    - Verifique as credenciais no arquivo `.env`.
 
-2. **Porta Já em Uso**:
-   - Se a porta `3000` estiver em uso, altere a porta no arquivo `.env`:
-     ```env
-     PORT=4000
-     ```
-
-3. **Erro de Autenticação (ER_NOT_SUPPORTED_AUTH_MODE)**:
+2. **Erro de Autenticação (ER_NOT_SUPPORTED_AUTH_MODE)**:
    - Atualize o plugin de autenticação para o usuário do MySQL:
      ```sql
      ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'sua_senha';
@@ -242,4 +293,3 @@ Use o **Postman** ou outro cliente de API para testar os endpoints. Abaixo estã
 ---
 
 Com essas etapas concluídas, sua API deve estar totalmente funcional e pronta para uso!
-
